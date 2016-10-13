@@ -236,7 +236,7 @@
     	},
     	{
     	  "name": "GIT_REPO",
-    	  "value": "https://github.com/weimeilin79/healthcaredemos2i.git",
+    	  "value": "https://github.com/tgubeli/healthcaredemos2i.git",
     	  "required": true,
     	  "description": "Git repository, required"
     	},

@@ -8,8 +8,8 @@
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 	
   	<bean id="amqConnectionFactory" class="io.fabric8.mq.core.MQConnectionFactory">
-  		<property name="userName" value="usereWw"/>
-      <property name="password" value="oIT64b08"/>
+  		<property name="userName" value="userVCA"/>
+      <property name="password" value="gly41jAp"/>
   	</bean>
 	<bean id="amq" class="io.fabric8.mq.camel.AMQComponent"></bean>
    

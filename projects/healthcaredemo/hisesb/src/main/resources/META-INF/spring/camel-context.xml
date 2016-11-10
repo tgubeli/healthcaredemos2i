@@ -1,84 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Configures the Camel Context-->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-  <bean id="hl7encoder" class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory">
-    <property name="charset" value="iso-8859-1"/>
-    <property name="convertLFtoCR" value="true"/>
-   </bean>
-
-   <bean id="hl7decoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory">
-    <property name="charset" value="iso-8859-1"/>
-    <property name="convertLFtoCR" value="true"/>
-   </bean>
-
-  <bean id="amqConnectionFactory" class="io.fabric8.mq.core.MQConnectionFactory">
-	  <property name="userName" value="admin"/>
-    <property name="password" value="r3dh4t1!"/>
-  </bean>
-  <bean id="amq" class="io.fabric8.mq.camel.AMQComponent"></bean>
-  
-  <!-- here is a sample which processes the input files
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean
+        class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory" id="hl7encoder">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="convertLFtoCR" value="true"/>
+    </bean>
+    <bean
+        class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory" id="hl7decoder">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="convertLFtoCR" value="true"/>
+    </bean>
+    <bean class="io.fabric8.mq.core.MQConnectionFactory" id="amqConnectionFactory">
+        <property name="userName" value="admin"/>
+        <property name="password" value="r3dh4t1!"/>
+    </bean>
+    <bean class="io.fabric8.mq.camel.AMQComponent" id="amq"/>
+    <!-- here is a sample which processes the input files
          (leaving them in place - see the 'noop' flag)
-         then performs content based routing on the message using XPath --><!-- To Clinic application --><!-- To Lab machine 
+         then performs content based routing on the message using XPath -->
+    <!-- To Clinic application -->
+    <!-- To Lab machine 
 	  		<to uri="netty4:tcp://127.0.0.1:8081?sync=true&amp;requestTimeout=5000&amp;decoder=#hl7decoder&amp;encoder=#hl7encoder"/>
 	    	-->
-<!-- To Radiology system -->
- <camelContext id="hisesbservice" xmlns="http://camel.apache.org/schema/spring">
-  <route id="transmitroute">
-    <from uri="amq:queue:msgtransmit"/>
-    <transform>
-      <simple>${body.replaceAll("&lt;", "&amp;lt;")}</simple>
-    </transform>
-    <transform>
-      <simple>${body.replaceAll("&gt;", "&amp;gt;")}</simple>
-    </transform>
-    <log message="${body}"/>
-    <to uri="websocket://demo?port=9123&amp;sendToAll=true"/>
-  </route>
-  
-  <route id="Handle ADT HL7 Messages">
-    <from uri="amq:queue:ADTMSG"/>
-    <wireTap uri="amq:queue:msgtransmit"/>
-    <unmarshal>
-      <hl7/>
-    </unmarshal>
-    <log message="Message body: ${body}" id="_log1"/>
-    <log message="Message Type: ${header.CamelHL7MessageType}"/>
-    <log message="Trigger Event: ${header.CamelHL7TriggerEvent}"/>
-    <choice>
-      <when>
-        <simple>${header.CamelHL7TriggerEvent} == 'A01'</simple>
-        <log message="A01"/>
-        <marshal>
-          <hl7/>
-        </marshal>
-        <multicast>
-          <to uri="netty4:tcp://clinicservice:8889?sync=true&amp;requestTimeout=5000&amp;decoder=#hl7decoder&amp;encoder=#hl7encoder"/>
-          <to uri="amq:queue:radiology"/>
-          <to uri="amq:queue:LABREGMSG"/>
-        </multicast>
-        <setHeader headerName="CamelHttpMethod">
-          <constant>POST</constant>
-        </setHeader>
-      </when>
-      <otherwise>
-        <log message="DO NOTHING!"/>
-      </otherwise>
-    </choice>
-  </route>
-  
-  <route id="Handle Radiology HL7 Messages">
-    <from uri="amq:queue:RADIOMSG"/>
-    <wireTap uri="amq:queue:msgtransmit"/>
-    <to uri="amq:queue:radiologytest"/>
-  </route>
-</camelContext>
-  
- 
-
+    <!-- To Radiology system -->
+    <camelContext id="hisesbservice" xmlns="http://camel.apache.org/schema/spring">
+        <route id="transmitroute">
+            <from id="_from1" uri="amq:queue:msgtransmit"/>
+            <transform id="_transform1">
+                <simple>${body.replaceAll("&lt;", "&amp;lt;")}</simple>
+            </transform>
+            <transform id="_transform2">
+                <simple>${body.replaceAll("&gt;", "&amp;gt;")}</simple>
+            </transform>
+            <log id="_log2" message="${body}"/>
+            <to id="_to1" uri="websocket://demo?port=9123&amp;sendToAll=true"/>
+        </route>
+        <route id="Handle ADT HL7 Messages">
+            <from id="_from2" uri="amq:queue:ADTMSG"/>
+            <wireTap id="_wireTap1" uri="amq:queue:msgtransmit"/>
+            <unmarshal id="_unmarshal1">
+                <hl7/>
+            </unmarshal>
+            <log id="_log1" message="Message body: ${body}"/>
+            <log id="_log3" message="Message Type: ${header.CamelHL7MessageType}"/>
+            <log id="_log4" message="Trigger Event: ${header.CamelHL7TriggerEvent}"/>
+            <choice id="_choice1">
+                <when id="_when1">
+                    <simple>${header.CamelHL7TriggerEvent} == 'A01'</simple>
+                    <log id="_log5" message="A01"/>
+                    <marshal id="_marshal1">
+                        <hl7/>
+                    </marshal>
+                    <multicast id="_multicast1">
+                        <to id="_to2" uri="netty4:tcp://clinicservice:8889?sync=true&amp;requestTimeout=5000&amp;decoder=#hl7decoder&amp;encoder=#hl7encoder"/>
+                        <to id="_to3" uri="amq:queue:radiology"/>
+                        <to id="_to4" uri="amq:queue:LABREGMSG"/>
+                    </multicast>
+                    <setHeader headerName="CamelHttpMethod" id="_setHeader1">
+                        <constant>POST</constant>
+                    </setHeader>
+                </when>
+                <otherwise id="_otherwise1">
+                    <log id="_log6" message="DO NOTHING!"/>
+                    <to id="_to6" uri="netty4:tcp://"/>
+                </otherwise>
+            </choice>
+        </route>
+        <route id="Handle Radiology HL7 Messages">
+            <from id="_from3" uri="amq:queue:RADIOMSG"/>
+            <wireTap id="_wireTap2" uri="amq:queue:msgtransmit"/>
+            <to id="_to5" uri="amq:queue:radiologytest"/>
+        </route>
+    </camelContext>
 </beans>

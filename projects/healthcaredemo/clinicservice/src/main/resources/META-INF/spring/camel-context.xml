@@ -1,121 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Configures the Camel Context-->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-
-	<!--<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!--<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
       <property name="brokerURL" value="tcp://localhost:61616"/>
       <property name="userName" value="admin"/>
       <property name="password" value="admin"/>
   	</bean>-->
-  	
-  	<bean id="amqConnectionFactory" class="io.fabric8.mq.core.MQConnectionFactory">
-		<property name="userName" value="admin"/>
-		<property name="password" value="r3dh4t1!"/>
-	</bean>
-	<bean id="amq" class="io.fabric8.mq.camel.AMQComponent"></bean>
-	
-   	<bean id="hl7encoder" class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory">
-    	<property name="charset" value="iso-8859-1"/>
-    	<property name="convertLFtoCR" value="true"/>
-   	</bean>
-
-   <bean id="hl7decoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory">
-    <property name="charset" value="iso-8859-1"/>
-    <property name="convertLFtoCR" value="true"/>
-   </bean>
-
-   <bean id="ACK" class="org.apache.camel.component.hl7.HL7" factory-method="ack"/>
-   <bean id="clinicRegistryService" class="com.mycompany.camel.spring.ClinicRegistryService" />
-   <bean id="prescriptionService" class="com.mycompany.camel.spring.PrescriptionService" />
-   
-   <camelContext id="ClinicService" xmlns="http://camel.apache.org/schema/spring">
-   <route>
-    <from uri="netty4:tcp://0.0.0.0:8889?sync=true&amp;decoder=#hl7decoder&amp;encoder=#hl7encoder"/>
-    <log message="${body}"/>
-    <unmarshal>
-      <hl7/>
-    </unmarshal>
-    <log message="Message body: ${body}" id="_log1"/>
-    <log message="Message Type: ${header.CamelHL7MessageType}"/>
-    <log message="Trigger Event: ${header.CamelHL7TriggerEvent}"/>  
-    <setHeader headerName="familyName">
-		<terser>PID-5-1</terser>
-    </setHeader>
-    <setHeader headerName="firstName">
-		<terser>PID-5-2</terser>
-    </setHeader>
-    <setHeader headerName="birthday">
-		<terser>PID-7-1</terser>
-    </setHeader>
-   	<setHeader headerName="gender">
-		<terser>PID-8-1</terser>
-    </setHeader>
-    <setHeader headerName="hsId">
-		<terser>PID-10-4</terser>
-    </setHeader>
-    <setHeader headerName="address">
-		<terser>PID-11-1</terser>
-    </setHeader>
-    <setHeader headerName="emergency">
-		<terser>PID-11-3</terser>
-    </setHeader>
-    <setHeader headerName="emergencyaddress">
-		<terser>PID-11-8</terser>
-    </setHeader> 
-    <bean ref="clinicRegistryService"/>
-    <transform>
-      <ref>ACK</ref>
-    </transform>
-    <setBody>
-    	<simple>${header.firstName} ${header.familyName}, birthday:${header.birthday} Gender:${header.gender} </simple>
-    </setBody>
-    <to uri="websocket://demo?port=9292&amp;sendToAll=true"/>
-  </route>
-  
-  <route id="doTest">
-  	<from uri="amq:queue:DOTESTMSG"/>
-  	<log message="doTest hisid: ${headers.dept}"/>
-	<log message="doTest testdetail: ${headers.testdetail}"/>
-	<log message="doTest observation: ${headers.observation}"/>
-	<log message="doTest hsId: ${headers.hisid}"/>
-	<bean ref="clinicRegistryService" method="orderTest(${headers.hisid},${headers.dept},${headers.testdetail})"/>
-  	<bean ref="clinicRegistryService" method="recordObservation(${body},${headers.observation})"/>
-  	<choice>
-		<when>
-	    	<simple>${headers.dept} == "laboratory"</simple>
-	    	<to uri="activemq:queue:LABTESTMSG"/>
-	    </when>
-	   	<when>
-	   		<simple>${headers.dept} == "radiology"</simple>
-	   		<to uri="activemq:queue:RADIOMSG"/>
-	   	</when>
-    	<otherwise>	    	
-    		<log message="UNKNOW DEPT DO Nothing"/>
-	    </otherwise>
-	 </choice>
-  </route>
-  
-  <route id="doPrescription">
-  	<from uri="amq:queue:PRESCRIPTIONMSG"/>
-   	<log message="prescribe hisid: ${headers.hisid}"/>
-	<log message="diagnose interval: ${headers.interval}"/>
-	<log message="diagnose prescription: ${headers.prescription}"/>
-	<bean ref="prescriptionService" method="addPrescription(${headers.hisid}, ${headers.interval},${headers.prescription})" />
-  	<setBody>
-		<constant>OK</constant>
-	</setBody>
-  </route>
-  
-  <route id="doPharmacy">
-  	<from uri="amq:queue:PHARMACYMSG"/>
-   	<log message="prescribe hisid: ${headers.hisid}"/>
-   	<bean ref="prescriptionService" method="getPrescription(${headers.hisid})" />
-  </route>
-  </camelContext>
-
+    <bean class="io.fabric8.mq.core.MQConnectionFactory" id="amqConnectionFactory">
+        <property name="userName" value="admin"/>
+        <property name="password" value="r3dh4t1!"/>
+    </bean>
+    <bean class="io.fabric8.mq.camel.AMQComponent" id="amq"/>
+    <bean
+        class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory" id="hl7encoder">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="convertLFtoCR" value="true"/>
+    </bean>
+    <bean
+        class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory" id="hl7decoder">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="convertLFtoCR" value="true"/>
+    </bean>
+    <bean class="org.apache.camel.component.hl7.HL7"
+        factory-method="ack" id="ACK"/>
+    <bean class="com.mycompany.camel.spring.ClinicRegistryService" id="clinicRegistryService"/>
+    <bean class="com.mycompany.camel.spring.PrescriptionService" id="prescriptionService"/>
+    <camelContext id="ClinicService" xmlns="http://camel.apache.org/schema/spring">
+        <route id="_route1">
+            <from id="_from1" uri="netty4:tcp://0.0.0.0:8889?sync=true&amp;decoder=#hl7decoder&amp;encoder=#hl7encoder"/>
+            <log id="_log2" message="${body}"/>
+            <unmarshal id="_unmarshal1">
+                <hl7/>
+            </unmarshal>
+            <log id="_log1" message="Message body: ${body}"/>
+            <log id="_log3" message="Message Type: ${header.CamelHL7MessageType}"/>
+            <log id="_log4" message="Trigger Event: ${header.CamelHL7TriggerEvent}"/>
+            <setHeader headerName="familyName" id="_setHeader1">
+                <terser>PID-5-1</terser>
+            </setHeader>
+            <setHeader headerName="firstName" id="_setHeader2">
+                <terser>PID-5-2</terser>
+            </setHeader>
+            <setHeader headerName="birthday" id="_setHeader3">
+                <terser>PID-7-1</terser>
+            </setHeader>
+            <setHeader headerName="gender" id="_setHeader4">
+                <terser>PID-8-1</terser>
+            </setHeader>
+            <setHeader headerName="hsId" id="_setHeader5">
+                <terser>PID-10-4</terser>
+            </setHeader>
+            <setHeader headerName="address" id="_setHeader6">
+                <terser>PID-11-1</terser>
+            </setHeader>
+            <setHeader headerName="emergency" id="_setHeader7">
+                <terser>PID-11-3</terser>
+            </setHeader>
+            <setHeader headerName="emergencyaddress" id="_setHeader8">
+                <terser>PID-11-8</terser>
+            </setHeader>
+            <bean id="_bean1" ref="clinicRegistryService"/>
+            <transform id="_transform1">
+                <ref>ACK</ref>
+            </transform>
+            <setBody id="_setBody1">
+                <simple>${header.firstName} ${header.familyName}, birthday:${header.birthday} Gender:${header.gender} </simple>
+            </setBody>
+            <to id="_to1" uri="websocket://demo?port=9292&amp;sendToAll=true"/>
+        </route>
+        <route id="doTest">
+            <from id="_from2" uri="amq:queue:DOTESTMSG"/>
+            <log id="_log5" message="doTest hisid: ${headers.dept}"/>
+            <log id="_log6" message="doTest testdetail: ${headers.testdetail}"/>
+            <log id="_log7" message="doTest observation: ${headers.observation}"/>
+            <log id="_log8" message="doTest hsId: ${headers.hisid}"/>
+            <bean id="_bean2"
+                method="orderTest(${headers.hisid},${headers.dept},${headers.testdetail})" ref="clinicRegistryService"/>
+            <bean id="_bean3"
+                method="recordObservation(${body},${headers.observation})" ref="clinicRegistryService"/>
+            <choice id="_choice1">
+                <when id="_when1">
+                    <simple>${headers.dept} == "laboratory"</simple>
+                    <to id="_to2" uri="activemq:queue:LABTESTMSG"/>
+                </when>
+                <when id="_when2">
+                    <simple>${headers.dept} == "radiology"</simple>
+                    <to id="_to3" uri="activemq:queue:RADIOMSG"/>
+                </when>
+                <otherwise id="_otherwise1">
+                    <log id="_log9" message="UNKNOW DEPT DO Nothing"/>
+                </otherwise>
+            </choice>
+        </route>
+        <route id="doPrescription">
+            <from id="_from3" uri="amq:queue:PRESCRIPTIONMSG"/>
+            <log id="_log10" message="prescribe hisid: ${headers.hisid}"/>
+            <log id="_log11" message="diagnose interval: ${headers.interval}"/>
+            <log id="_log12" message="diagnose prescription: ${headers.prescription}"/>
+            <bean id="_bean4"
+                method="addPrescription(${headers.hisid}, ${headers.interval},${headers.prescription})" ref="prescriptionService"/>
+            <setBody id="_setBody2">
+                <constant>OK</constant>
+            </setBody>
+        </route>
+        <route id="doPharmacy">
+            <from id="_from4" uri="amq:queue:PHARMACYMSG"/>
+            <log id="_log13" message="prescribe hisid: ${headers.hisid}"/>
+            <bean id="_bean5" method="getPrescription(${headers.hisid})" ref="prescriptionService"/>
+        </route>
+    </camelContext>
 </beans>

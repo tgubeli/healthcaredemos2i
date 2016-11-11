@@ -37,9 +37,6 @@
             <setHeader headerName="familyName" id="_setHeader2">
                 <terser>PID-5-1</terser>
             </setHeader>
-            <setHeader headerName="firstName" id="_setHeader3">
-                <terser>PID-5-2</terser>
-            </setHeader>
             <!--             <bean id="_bean1" -->
             <!--                 method="convertFHIRformat(${headers.firstName},${headers.familyName},${headers.hisId},${headers.testcontent})" ref="fhirConoverter"/> -->
             <!--             <wireTap id="_wireTap1" uri="amq:queue:msgtransmit"/> -->
@@ -48,6 +45,9 @@
             <!--                 <constant>POST</constant> -->
             <!--             </setHeader> -->
             <!--             <to id="_to2" uri="http4://laboratoryservice:8081/fhirLab/labtest/${headers.hisId}/ordertest"/> -->
+            <setHeader headerName="firstName" id="_setHeader3">
+                <terser>PID-5-2</terser>
+            </setHeader>
             <setHeader headerName="hisId" id="_setHeader4">
                 <terser>PID-10-4</terser>
             </setHeader>

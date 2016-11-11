@@ -19,7 +19,7 @@
 	<module>radiologyservice</module>
 	<module>registryservice</module>
 	<module>webconsoleservice</module>		
-  <module>registryhl7</module>
+  <module>registryhl7service</module>
   </modules>
 
   <properties>

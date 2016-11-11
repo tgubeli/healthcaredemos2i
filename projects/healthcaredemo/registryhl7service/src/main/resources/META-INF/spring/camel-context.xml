@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~ Copyright (C) Red Hat, Inc.
+~ http://www.redhat.com
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~    http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd                            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean
+        class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory" id="hl7encoder">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="convertLFtoCR" value="true"/>
+    </bean>
+    <bean
+        class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory" id="hl7decoder">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="convertLFtoCR" value="true"/>
+    </bean>
+    <bean class="org.apache.camel.component.hl7.HL7"
+        factory-method="ack" id="ackGenerator" scope="prototype"/>
+        
+    <bean class="io.fabric8.mq.core.MQConnectionFactory" id="amqConnectionFactory">
+        <property name="userName" value="admin"/>
+        <property name="password" value="r3dh4t1!"/>
+    </bean>
+    <bean class="io.fabric8.mq.camel.AMQComponent" id="amq"/>
+    
+        
+    <camelContext id="camelContext-6e33e67f-d34d-45fa-9ff0-e191e79ed49f" xmlns="http://camel.apache.org/schema/spring">
+        <route id="hl7TcpRoute">
+            <from id="_from1" uri="netty4:tcp://localhost:8888?sync=true&amp;decoder=#hl7decoder&amp;encoder=#hl7encoder"/>
+            <to id="_to1" uri="direct:hl7Main"/>
+        </route>
+        <route id="hl7FileRoute">
+            <from id="_from2" uri="file:///tmp/hl7-example/?delete=true&amp;readLock=fileLock&amp;moveFailed=.error&amp;antInclude=*.hl7"/>
+            <convertBodyTo id="_convertBodyTo1" type="java.lang.String"/>
+            <to id="_to2" uri="direct:hl7Main"/>
+        </route>
+        <route id="hl7MainRoute">
+            <from id="_from3" uri="direct:hl7Main"/>
+            <onException id="_onException1">
+                <exception>ca.uhn.hl7v2.validation.ValidationException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+                <log id="_log1" message="Got an exception: ${exception.message}"/>
+                <transform id="_transform1">
+                    <ref>ackGenerator</ref>
+                </transform>
+                <marshal id="_marshal1">
+                    <hl7 validate="true"/>
+                </marshal>
+                <log id="_log2" message="HL7 Response: ${body}"/>
+            </onException>
+            <log id="_log3" message="HL7 Request: ${body}"/>
+            <unmarshal id="_unmarshal1">
+                <hl7 validate="true"/>
+            </unmarshal>
+            <to id="_to3" uri="mq:queue:ADTMSG"/>
+            <transform id="_transform2">
+                <ref>ackGenerator</ref>
+            </transform>
+            <marshal id="_marshal2">
+                <hl7 validate="true"/>
+            </marshal>
+            <log id="_log5" message="HL7 Response: ${body}"/>
+        </route>
+    </camelContext>
+</beans>

@@ -5,15 +5,15 @@
   <groupId>com.mycompany</groupId>
   <artifactId>registryhl7service</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>Servicio para registro con HL7</name>
+  <name>Registro con HL7</name>
   <properties>
     <activemq.version>5.11.0.redhat-621084</activemq.version>
     <fabric8.label.group>healthcaredemo</fabric8.label.group>
     <hapi.version>2.2</hapi.version>
     <fuse.version>6.2.1.redhat-084</fuse.version>
     <fabric8.service.name>radiologyservice</fabric8.service.name>
-    <fabric8.iconRef>camel</fabric8.iconRef>
     <docker.port.container.jolokia>8778</docker.port.container.jolokia>
+    <fabric8.iconRef>camel</fabric8.iconRef>
     <fabric8.label.component>${project.artifactId}</fabric8.label.component>
     <http.port>9293</http.port>
     <docker.image>${fabric8.dockerUser}${project.artifactId}:${project.version}</docker.image>
@@ -48,27 +48,27 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-core</artifactId>
-      <version>2.17.3</version>
+      <version>2.15.1.redhat-621084</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-spring</artifactId>
-      <version>2.17.3</version>
+      <version>2.15.1.redhat-621084</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-test-spring</artifactId>
-      <version>2.17.3</version>
+      <version>2.15.1.redhat-621084</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-groovy</artifactId>
-      <version>2.17.3</version>
+      <version>2.15.1.redhat-621084</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-hl7</artifactId>
-      <version>2.17.3</version>
+      <version>2.15.1.redhat-621084</version>
     </dependency>
     <dependency>
       <groupId>ca.uhn.hapi</groupId>
@@ -83,17 +83,15 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-netty4</artifactId>
-      <version>2.17.3</version>
+      <version>2.15.1.redhat-621084</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>${slf4j.version}</version>
     </dependency>
     <dependency>
       <groupId>ca.uhn.hapi</groupId>
@@ -236,7 +234,7 @@
       <plugin>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-maven-plugin</artifactId>
-        <version>2.17.3</version>
+        <version>2.15.1.redhat-621084</version>
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>

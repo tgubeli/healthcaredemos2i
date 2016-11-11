@@ -37,14 +37,6 @@
             <setHeader headerName="familyName" id="_setHeader2">
                 <terser>PID-5-1</terser>
             </setHeader>
-            <!--             <bean id="_bean1" -->
-            <!--                 method="convertFHIRformat(${headers.firstName},${headers.familyName},${headers.hisId},${headers.testcontent})" ref="fhirConoverter"/> -->
-            <!--             <wireTap id="_wireTap1" uri="amq:queue:msgtransmit"/> -->
-            <!--             <removeHeaders id="_removeHeaders2" pattern="CamelHttp*"/> -->
-            <!--             <setHeader headerName="CamelHttpMethod" id="_setHeader6"> -->
-            <!--                 <constant>POST</constant> -->
-            <!--             </setHeader> -->
-            <!--             <to id="_to2" uri="http4://laboratoryservice:8081/fhirLab/labtest/${headers.hisId}/ordertest"/> -->
             <setHeader headerName="firstName" id="_setHeader3">
                 <terser>PID-5-2</terser>
             </setHeader>
@@ -54,10 +46,14 @@
             <setHeader headerName="testcontent" id="_setHeader5">
                 <terser>OBR-4-2</terser>
             </setHeader>
-            <setBody id="_setBody2">
-                <simple>Accept test : ${headers.perscription}</simple>
-            </setBody>
-            <to id="_to2" uri="websocket://demo?port=9292&amp;sendToAll=true"/>
+            <bean id="_bean1"
+                method="convertFHIRformat(${headers.firstName},${headers.familyName},${headers.hisId},${headers.testcontent})" ref="fhirConoverter"/>
+            <wireTap id="_wireTap1" uri="amq:queue:msgtransmit"/>
+            <removeHeaders id="_removeHeaders2" pattern="CamelHttp*"/>
+            <setHeader headerName="CamelHttpMethod" id="_setHeader6">
+                <constant>POST</constant>
+            </setHeader>
+            <to id="_to2" uri="http4://laboratoryservice:8081/fhirLab/labtest/${headers.hisId}/ordertest"/>
         </route>
     </camelContext>
 </beans>

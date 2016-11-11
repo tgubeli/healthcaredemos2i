@@ -12,6 +12,18 @@
 		<property name="password" value="r3dh4t1!" />
 	</bean>
 	<bean id="amq" class="io.fabric8.mq.camel.AMQComponent"></bean>
+	
+	<bean
+        class="org.apache.camel.component.hl7.HL7MLLPNettyEncoderFactory" id="hl7encoder">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="convertLFtoCR" value="true"/>
+    </bean>
+    <bean
+        class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory" id="hl7decoder">
+        <property name="charset" value="iso-8859-1"/>
+        <property name="convertLFtoCR" value="true"/>
+    </bean>
+    <bean class="com.mycompany.camel.spring.FHIRConoverter" id="fhirConoverter"/>
 
 	<camelContext id="LaboratoryService" xmlns="http://camel.apache.org/schema/spring">
 		<!-- here is a sample which processes the input files (leaving them in 

@@ -14,7 +14,6 @@
         <route id="test">
             <from id="_from1" uri="amq:queue:radiologytest"/>
             <log id="_log1" message="${body}"/>
-            <wireTap id="_wireTap1" uri="amq:queue:msgtransmit"/>
             <unmarshal id="_unmarshal1">
                 <hl7/>
             </unmarshal>

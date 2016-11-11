@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:fhir="http://hl7.org/fhir"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!--  <to uri="websocket://demo?host=localhost&amp;port=9294&amp;sendToAll=true"/>-->
+    <!--  <xpath resultType="java.lang.String">/Bundle/entry/resource/DiagnosticOrder/item/code/coding/display/@value</xpath> -->
+    <camelContext id="LabService" xmlns="http://camel.apache.org/schema/spring">
+        <restConfiguration bindingMode="auto" component="jetty"
+            enableCORS="true" port="8081">
+            <corsHeaders key="Access-Control-Allow-Origin" value="*"/>
+            <corsHeaders key="Access-Control-Allow-Methods" value="GET"/>
+        </restConfiguration>
+        <rest path="/fhirLab">
+            <get uri="/registry/{hisid}">
+                <to uri="direct:doRegistry"/>
+            </get>
+            <post consumes="application/xml" uri="/labtest/{hisid}/ordertest">
+                <to uri="direct:ordertest"/>
+            </post>
+            <get uri="/labresult/{orderid}">
+                <to uri="direct:returnlabresult"/>
+            </get>
+        </rest>
+        <route id="_route2">
+            <from id="_from1" uri="direct:doRegistry"/>
+            <setBody id="_setBody1">
+                <simple>One Patient admitted</simple>
+            </setBody>
+            <to id="_to1" uri="direct:doTestDisplay"/>
+        </route>
+        <route id="doTestDisplay">
+            <from id="_from2" uri="direct:doTestDisplay"/>
+            <log id="_log1" message="Log doTestDisplay"/>
+            <to id="_to2" uri="websocket://demo?port=9294&amp;sendToAll=true"/>
+        </route>
+        <route id="ordertest">
+            <from id="_from3" uri="direct:ordertest"/>
+            <log id="_log2" message="Log ordertest"/>
+            <setHeader headerName="perscription" id="_setHeader1">
+                <xpath resultType="String">/fhir:Bundle/fhir:entry/fhir:resource/fhir:DiagnosticOrder/fhir:item/fhir:code/fhir:coding/fhir:display/@value</xpath>
+            </setHeader>
+            <setBody id="_setBody2">
+                <simple>Accept test : ${headers.perscription}</simple>
+            </setBody>
+            <to id="_to3" uri="direct:doTestDisplay"/>
+        </route>
+    </camelContext>
+</beans>

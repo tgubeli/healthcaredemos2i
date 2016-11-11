@@ -37,7 +37,7 @@
     <bean class="io.fabric8.mq.camel.AMQComponent" id="amq"/>
     <camelContext id="camelContext-6e33e67f-d34d-45fa-9ff0-e191e79ed49f" xmlns="http://camel.apache.org/schema/spring">
         <route id="hl7TcpRoute">
-            <from id="_from1" uri="netty4:tcp://localhost:8888?sync=true&amp;decoder=#hl7decoder&amp;encoder=#hl7encoder"/>
+            <from id="_from1" uri="netty4:tcp://openshift.example.com:8888?sync=true&amp;decoder=#hl7decoder&amp;encoder=#hl7encoder"/>
             <to id="_to1" uri="direct:hl7Main"/>
         </route>
         <route id="hl7FileRoute">

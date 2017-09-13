@@ -72,8 +72,8 @@ Expose all service to route.
 		$ oc expose svc laboratoryservice
 		$ oc expose svc radiologyservice
 
-Go to  https://github.com/weimeilin79/healthcareweb, clone it to your own repository
-And go to 'health.html' and update the urls to your exposed routes. 
+Go to  https://github.com/tgubeli/healthcareweb, clone it to your own repository
+And go to '/production/demo.html' and update the urls to your exposed routes. 
 
 	 Replace all
 	 healthwebconsole-rhteapitemp.apps.ose.rhsummit.openshift.online 
@@ -106,7 +106,7 @@ Install GUI page and frontend for healthcare install
 
 Finally, start playing with the demo by registering your info        
 
-    http://healthcareweb-fusedemo.YOUR_OPENSHIFT_DOMAIN/health.html
+    http://healthcareweb-fusedemo.YOUR_OPENSHIFT_DOMAIN/production/demo.html
     
  
 Running the demo

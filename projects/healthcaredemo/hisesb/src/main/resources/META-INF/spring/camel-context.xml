@@ -64,7 +64,7 @@
                 </when>
                 <otherwise id="_otherwise1">
                     <log id="_log6" message="DO NOTHING!"/>
-                    <to id="_to6" uri="netty4:tcp://"/>
+                    
                 </otherwise>
             </choice>
         </route>

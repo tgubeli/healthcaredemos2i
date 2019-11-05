@@ -34,8 +34,8 @@
     <!-- the version of the BOM, defining all the dependency versions -->
     <fuse.version>6.2.1.redhat-084</fuse.version>
     
-    <activemq.version>5.11.0.redhat-621084</activemq.version>
-    <fabric8.version>2.2.0.redhat-079</fabric8.version>
+    <activemq.version>5.11.0.redhat-630396</activemq.version>
+    <fabric8.version>2.2.0.redhat-087</fabric8.version>
     <docker.maven.plugin.version>0.13.6</docker.maven.plugin.version>
     
     <!--<fabric8.annotations.service.apiman.io.servicePath>cxfcdi</fabric8.annotations.service.apiman.io.servicePath>
@@ -251,7 +251,7 @@
       <plugin>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-maven-plugin</artifactId>
-        <version>2.15.1.redhat-621084</version>
+        <version>2.15.1.redhat-621216</version>
       </plugin>
       <!-- OpenShift required -->
       <plugin>

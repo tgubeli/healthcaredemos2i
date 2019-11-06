@@ -350,22 +350,7 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>io.fabric8</groupId>
-        <artifactId>hawt-app-maven-plugin</artifactId>
-        <version>${fabric8.version}</version>
-        <executions>
-          <execution>
-            <id>hawt-app</id>
-            <goals>
-							<goal>build</goal>
-						</goals>
-            <configuration>
-              <javaMainClass>org.apache.camel.spring.Main</javaMainClass>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      
       
       <plugin>
         <groupId>org.jolokia</groupId>

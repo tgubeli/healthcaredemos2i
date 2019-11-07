@@ -42,7 +42,7 @@ Create template for A-MQ and Fuse. NOTE: This only apply those who runs CDK, if 
 		$ oc new-project openshift
 		$ oc project openshift
 		$ oc create -f https://raw.githubusercontent.com/jboss-fuse/application-templates/master/fis-image-streams.json
-		$ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq62-basic.json
+		$ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-basic.json
 		
 
 Create new project to host all applications
@@ -51,7 +51,7 @@ Create new project to host all applications
 
 Before we get started, first, create a messaging service
 
-		$ oc new-app amq62-basic -p MQ_PROTOCOL=openwire MQ_USERNAME=admin MQ_PASSWORD=r3dh4t1!
+		$ oc new-app amq63-basic -p MQ_PROTOCOL=openwire -p MQ_USERNAME=admin -p MQ_PASSWORD=r3dh4t1!
 
 Start build and deploying healthcare applications                  
 

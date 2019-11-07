@@ -23,7 +23,7 @@
     <fabric8.service.containerPort>${http.port}</fabric8.service.containerPort>
     <fabric8.service.port>80</fabric8.service.port>
     <docker.from>jboss-fuse-6/fis-java-openshift:1.0</docker.from>
-    <fabric8.version>2.2.0.redhat-079</fabric8.version>
+    <fabric8.version>2.2.82</fabric8.version>
     <docker.maven.plugin.version>0.13.6</docker.maven.plugin.version>
   </properties>
   <dependencyManagement>

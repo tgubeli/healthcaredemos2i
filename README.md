@@ -42,6 +42,7 @@ Create template for A-MQ and Fuse. NOTE: This only apply those who runs CDK, if 
 		$ oc new-project openshift
 		$ oc project openshift
 		$ oc create -f https://raw.githubusercontent.com/jboss-fuse/application-templates/master/fis-image-streams.json
+		$ oc apply -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-image-stream.json -n openshift
 		$ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-basic.json
 		
 

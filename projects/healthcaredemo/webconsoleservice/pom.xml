@@ -14,7 +14,7 @@
     <!-- http ports that are opened! -->
     <http.port>8080</http.port>
     
-    <fuse.version>6.3.0.redhat-067</fuse.version>
+    <fuse.version>6.2.1.redhat-084</fuse.version>
 
     <!-- Docker & Fabric8 Configs -->
     <docker.from>jboss-fuse-6/fis-java-openshift:1.0</docker.from>
@@ -90,7 +90,18 @@
      <releases>
       <enabled>true</enabled>
      </releases>
-    </repository>   
+    </repository>  
+    <repository>
+     <id>developer.fusesource.org</id>
+     <name>FuseSource Community Early Access Release Repository</name>
+     <url>http://repository.jboss.org/nexus/content/groups/developer</url>
+     <snapshots>
+      <enabled>true</enabled>
+     </snapshots>
+     <releases>
+      <enabled>true</enabled>
+     </releases>
+    </repository> 
   </repositories>
 
   <pluginRepositories>
@@ -115,7 +126,18 @@
      <releases>
       <enabled>true</enabled>
      </releases>
-    </pluginRepository>      
+    </pluginRepository>  
+    <pluginRepository>
+     <id>developer.fusesource.org</id>
+     <name>FuseSource Community Early Access Release Repository</name>
+     <url>http://repository.jboss.org/nexus/content/groups/developer</url>
+     <snapshots>
+      <enabled>false</enabled>
+     </snapshots>
+     <releases>
+      <enabled>true</enabled>
+     </releases>
+    </pluginRepository>    
   </pluginRepositories>
 
   <dependencyManagement>
@@ -157,13 +179,13 @@
 		<dependency>
 	    <groupId>org.apache.cxf</groupId>
 	    <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-	    <version>3.1.5.redhat-630045</version>
+	    <version>3.1.5.redhat-630187</version>
 		</dependency>
 	
 		<dependency>
 	    <groupId>org.apache.cxf</groupId>
 	    <artifactId>cxf-rt-transports-http-jetty</artifactId>
-	    <version>3.1.5.redhat-630045</version>
+	    <version>3.1.5.redhat-630187</version>
 		</dependency>
 	
 		<!-- swagger api -->

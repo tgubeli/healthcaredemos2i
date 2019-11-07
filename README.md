@@ -42,7 +42,6 @@ Create template for A-MQ and Fuse. NOTE: This only apply those who runs CDK, if 
 		$ oc new-project openshift
 		$ oc project openshift
 		$ oc create -f https://raw.githubusercontent.com/jboss-fuse/application-templates/master/fis-image-streams.json
-		$ oc apply -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-image-stream.json -n openshift
 		$ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-basic.json
 		
 
@@ -52,17 +51,17 @@ Create new project to host all applications
 
 Before we get started, first, create a messaging service
 
-		$ oc new-app amq63-basic -p MQ_PROTOCOL=openwire -p MQ_USERNAME=admin -p MQ_PASSWORD=r3dh4t1!
+		$ oc new-app amq63-basic -p MQ_PROTOCOL=openwire -p MQ_USERNAME=admin -p MQ_PASSWORD=admin
 
 Start build and deploying healthcare applications                  
 
-    $ oc new-app -f support/hisesb.json                    
-    $ oc new-app -f support/fhiresb.json
-    $ oc new-app -f support/clinichl7service.json
-    $ oc new-app -f support/laboratoryservice.json
-    $ oc new-app -f support/radiologyservice.json
-    $ oc new-app -f support/registryservice.json
-    $ oc new-app -f support/healthwebconsole.json
+    $ oc new-app -f support-yaml/hisesb.yaml                    
+    $ oc new-app -f support-yaml/fhiresb.yaml
+    $ oc new-app -f support-yaml/clinichl7service.yaml
+    $ oc new-app -f support-yaml/laboratoryservice.yaml
+    $ oc new-app -f support-yaml/radiologyservice.yaml
+    $ oc new-app -f support-yaml/registryservice.yaml
+    $ oc new-app -f support-yaml/healthwebconsole.yaml
 
 Expose all service to route.
 
@@ -73,8 +72,8 @@ Expose all service to route.
 		$ oc expose svc laboratoryservice
 		$ oc expose svc radiologyservice
 
-Go to  https://github.com/tgubeli/healthcareweb, clone it to your own repository
-And go to '/production/demo.html' and update the urls to your exposed routes. 
+Go to https://github.com/openshift-demo/healthcareweb, clone it to your own repository
+And go to 'health.html' and update the urls to your exposed routes. 
 
 	 Replace all
 	 healthwebconsole-rhteapitemp.apps.ose.rhsummit.openshift.online 
@@ -107,7 +106,7 @@ Install GUI page and frontend for healthcare install
 
 Finally, start playing with the demo by registering your info        
 
-    http://healthcareweb-fusedemo.YOUR_OPENSHIFT_DOMAIN/production/demo.html
+    http://healthcareweb-fusedemo.YOUR_OPENSHIFT_DOMAIN/health.html
     
  
 Running the demo

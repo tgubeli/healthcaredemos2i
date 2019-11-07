@@ -30,7 +30,7 @@
     <fuse.version>6.2.1.redhat-084</fuse.version>
     
     <activemq.version>5.11.0.redhat-621084</activemq.version>
-    <fabric8.version>2.2.82</fabric8.version>
+    <fabric8.version>2.2.0.redhat-079</fabric8.version>
     <docker.maven.plugin.version>0.13.6</docker.maven.plugin.version>
     
     <!--
@@ -91,7 +91,18 @@
      <releases>
       <enabled>true</enabled>
      </releases>
-    </repository>   
+    </repository> 
+    <repository>
+     <id>developer.fusesource.org</id>
+     <name>FuseSource Community Early Access Release Repository</name>
+     <url>http://repository.jboss.org/nexus/content/groups/developer</url>
+     <snapshots>
+      <enabled>true</enabled>
+     </snapshots>
+     <releases>
+      <enabled>true</enabled>
+     </releases>
+    </repository>  
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -115,7 +126,18 @@
      <releases>
       <enabled>true</enabled>
      </releases>
-    </pluginRepository>      
+    </pluginRepository> 
+    <pluginRepository>
+     <id>developer.fusesource.org</id>
+     <name>FuseSource Community Early Access Release Repository</name>
+     <url>http://repository.jboss.org/nexus/content/groups/developer</url>
+     <snapshots>
+      <enabled>false</enabled>
+     </snapshots>
+     <releases>
+      <enabled>true</enabled>
+     </releases>
+    </pluginRepository>     
   </pluginRepositories>
 
   <dependencyManagement>

@@ -36,18 +36,15 @@ Login to OpenShfit
 
     $ oc login -u YOUR_ID -p YOUR_PWD
     
-
-Create template for A-MQ and Fuse. NOTE: This only apply those who runs CDK, if you are running your application on OpenShift 3.2 and above, please ignore this step. 
-
-		$ oc new-project openshift
-		$ oc project openshift
-		$ oc create -f https://raw.githubusercontent.com/jboss-fuse/application-templates/master/fis-image-streams.json
-		$ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-basic.json
-		
-
 Create new project to host all applications
 	
 		$ oc new-project fusedemo
+    
+
+Create template for A-MQ (6.3) and Fuse (7.4). 
+
+		$ oc apply https://raw.githubusercontent.com/jboss-fuse/application-templates/2.1.x.redhat-7-4-x/fis-image-streams.json -n openshift
+		$ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-basic.json -n openshift
 
 Before we get started, first, create a messaging service
 

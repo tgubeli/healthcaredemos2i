@@ -43,8 +43,8 @@ Create new project to host all applications
 
 Create template for A-MQ (6.3) and Fuse (7.4). 
 
-    $ oc apply https://raw.githubusercontent.com/jboss-fuse/application-templates/2.1.x.redhat-7-4-x/fis-image-streams.json -n openshift
-    $ oc apply https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-image-stream.json -n openshift
+    $ oc apply -f https://raw.githubusercontent.com/jboss-fuse/application-templates/2.1.x.redhat-7-4-x/fis-image-streams.json -n openshift
+    $ oc apply -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-image-stream.json -n openshift
     $ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-basic.json
 
 Before we get started, first, create a messaging service

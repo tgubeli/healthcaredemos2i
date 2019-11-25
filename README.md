@@ -38,17 +38,17 @@ Login to OpenShfit
     
 Create new project to host all applications
 	
-		$ oc new-project fusedemo
+    $ oc new-project fusedemo
     
 
 Create template for A-MQ (6.3) and Fuse (7.4). 
 
-		$ oc apply https://raw.githubusercontent.com/jboss-fuse/application-templates/2.1.x.redhat-7-4-x/fis-image-streams.json -n openshift
-		$ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-basic.json -n openshift
+    $ oc apply https://raw.githubusercontent.com/jboss-fuse/application-templates/2.1.x.redhat-7-4-x/fis-image-streams.json -n openshift
+    $ oc create -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/amq/amq63-basic.json -n openshift
 
 Before we get started, first, create a messaging service
 
-		$ oc new-app amq63-basic -p MQ_PROTOCOL=openwire -p MQ_USERNAME=admin -p MQ_PASSWORD=admin
+    $ oc new-app amq63-basic -p MQ_PROTOCOL=openwire -p MQ_USERNAME=admin -p MQ_PASSWORD=admin
 
 Start build and deploying healthcare applications                  
 
@@ -62,12 +62,12 @@ Start build and deploying healthcare applications
 
 Expose all service to route.
 
-		$ oc expose svc clinicservice
-		$ oc expose svc fhiresb
-		$ oc expose svc healthwebconsole
-		$ oc expose svc hisesb
-		$ oc expose svc laboratoryservice
-		$ oc expose svc radiologyservice
+    $ oc expose svc clinicservice
+    $ oc expose svc fhiresb
+    $ oc expose svc healthwebconsole
+    $ oc expose svc hisesb
+    $ oc expose svc laboratoryservice
+    $ oc expose svc radiologyservice
 
 Go to https://github.com/openshift-demo/healthcareweb, clone it to your own repository
 And go to 'health.html' and update the urls to your exposed routes. 
